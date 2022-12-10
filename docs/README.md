@@ -18,30 +18,54 @@ Github - склонировать проект себе на ПК для пос�
 
 2. Запускаем контейнеры из файла `docker-compose.yml` командой в терминале:
 
-[docker-compose up]()
+```
+docker-compose up
+```
 
 и проверяем, что контейнеры запустились командой:
 
-[docker-compose ps]()
-
+```
+docker-compose ps
+```
 3. Во втором терминале запустить SUT командой
 
-для конфигурации с базой данный MySql:
-[java -Dspring.datasource.url=jdbc:mysql://192.168.99.100:3306/app -jar artifacts/aqa-shop.jar]()
+- для конфигурации с базой данный MySql:
 
-для конфигурации с базой данных PostgreSQL:
-[java -Dspring.datasource.url=jdbc:postgresql://192.168.99.100:5432/app -jar artifacts/aqa-shop.jar]()
+```
+java "-Dspring.datasource.url=jdbc:mysql://localhost:3306/app" -jar artifacts/aqa-shop.jar
+```
+
+- для конфигурации с базой данных PostgreSQL:
+
+```
+java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifacts/aqa-shop.jar
+```
+
 В браузере открыть SUT в окне с адресом
 
-[http://localhost:8080/]()
+[http://localhost:8080]()
+
 4. Запустить автотесты командой
 
 для конфигурации с MySql
-[gradlew test -Dtest.dburl=jdbc:mysql://192.168.99.100:3306/app]()
+
+
+```
+gradlew test -Dtest.dburl=jdbc:mysql://192.168.99.100:3306/app
+```
+
 для конфигурации с postgresql
-[gradlew test -Dtest.dburl=jdbc:postgresql://192.168.99.100:5432/app]()
-Остановить SUT командой CTRL + C
+
+```
+gradlew test -Dtest.dburl=jdbc:postgresql://192.168.99.100:5432/app
+```
 
 5. Остановить контейнеры командой CTRL + C и после удалить контейнеры командой
 
-[docker-compose down]()
+docker-compose down
+
+## Документация
+
+- [План автоматизации тестирования](https://github.com/ElinaHaf/DiplomProject/blob/master/docs/Plan.md)
+- [Отчёт по итогам автоматизированного тестирования]()
+- [Отчёт по итогам автоматизации]()
