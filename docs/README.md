@@ -43,7 +43,7 @@ java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifac
 
 В браузере открыть SUT в окне с адресом
 
-[http://localhost:8080]()
+`http://localhost:8080`
 
 4. Запустить автотесты командой
 
@@ -62,7 +62,9 @@ gradlew test -Dtest.dburl=jdbc:postgresql://192.168.99.100:5432/app
 
 5. Остановить контейнеры командой CTRL + C и после удалить контейнеры командой
 
+```
 docker-compose down
+```
 
 ## Документация
 
