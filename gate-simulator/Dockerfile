@@ -1,6 +1,6 @@
-FROM node:8.16.2-alpine
+FROM node:lts-alpine3.12
 WORKDIR /opt/app
-COPY .. .
+COPY . .
 RUN npm install
 CMD ["npm", "start"]
 EXPOSE 9999
