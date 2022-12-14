@@ -1,13 +1,14 @@
-package ru.netology.situations;
+package ru.netology.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Order {
+
+public class CreditRequest {
     String id;
+    String bank_id;
     String created;
-    String creditId;
-    String payment_id;
+    String status;
 }

@@ -1,13 +1,10 @@
 package ru.netology.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.BeforeAll;
 import ru.netology.data.DataHelper;
 
-import java.util.Locale;
-
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -29,12 +26,12 @@ public class PaymentPage {
     private final SelenideElement cardExpiredMessage = $(byText("истёк срок действия карты"));
     private final SelenideElement fieldFillRequiredMessage = $(byText("Поле обязательно для заполнения"));
 
-    public void fillForm(DataHelper.CardValidInformationModel info) {
-        numberField.setValue(info.getNumber());
-        monthField.setValue(info.getMonth());
-        yearField.setValue(info.getYear());
-        ownerField.setValue(info.getOwner());
-        cvvField.setValue(info.getCvv());
+    public void inputData(Card card) {
+        cardNumberField.setValue(card.getCardNumber());
+        monthField.setValue(card.getMonth());
+        yearField.setValue(card.getYear());
+        cardHolderField.setValue(card.getCardHolder());
+        cvvField.setValue(card.getCvv());
         continueButton.click();
     }
 

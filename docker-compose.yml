@@ -2,30 +2,23 @@ version: '3.7'
 services:
   mysql:
     image: mysql:latest
-    command: --innodb_use_native_aio=0
     ports:
       - '3306:3306'
-    volumes:
-      - ./data:/var/lib/mysql
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=app
       - MYSQL_USER=app
       - MYSQL_PASSWORD=pass
-
   postgres:
     image: postgres:12.0-alpine
     ports:
       - '5432:5432'
-    volumes:
-      - ./data_pg:/var/lib/postgresql/data_pg
     environment:
       - POSTGRES_RANDOM_ROOT_PASSWORD=yes
       - POSTGRES_DB=app
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=pass
-
   node-app:
-    build: ./gate-simulator
+    build: gate-simulator
     ports:
       - '9999:9999'

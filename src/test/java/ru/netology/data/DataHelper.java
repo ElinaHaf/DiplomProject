@@ -1,119 +1,206 @@
 package ru.netology.data;
 
+import com.github.javafaker.Faker;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @NoArgsConstructor
 public class DataHelper {
 
-    @Value
-    public static class CardValidInformationModel {
+    private static Faker faker = new Faker(new Locale("en"));
+
+    private static int validYear = Integer.parseInt(getCurrentYear()) + 1;
+    private static String numberApprovedCard = "4444 4444 4444 4441";
+    private static String numberDeclinedCard = "4444 4444 4444 4442";
+    private static String NotApprovedCard = "1234 5678 9123 4567";
+    private static String Symbols = "#$@@ @@$$ --%% ----";
+
+    //    FIELD NUMBER
+
+    public static CardInfo getValidApprovedCardData() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo getValidDeclinedCardData() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberDeclinedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo getAnotherBankCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(NotApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo getEmptyCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo("", getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo getSymbolsCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(Symbols, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+
+    // FIElD CVC
+    public static CardInfo getCardApprovedCvcNumberSymbols() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "---");
+    }
+
+    public static CardInfo getCardApprovedEmptyCVV() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "");
+    }
+
+    public static CardInfo getCardApprovedIfAllCvcZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "000");
+    }
+    public static CardInfo getCardApprovedIfAllCvcFalse() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "23");
+    }
+
+    //year
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreEmpty() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(""), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf("&*"), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf("00"), randomName, randomCvc);
+    }
+
+    //month
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreEmpty() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "&*", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "00", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+
+    public static CardInfo generateDataWithRandomCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCardNumber = faker.number().digits(16);
+        var randomCvc = faker.number().digits(3);
+        return  new CardInfo(randomCardNumber, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndParametrizedMonthAndYear(String month, String year) {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return  new CardInfo(numberApprovedCard, month, year, randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithDeclineCardAndParametrizedMonthAndYear(String month, String year) {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return  new CardInfo(numberDeclinedCard, month, year, randomName, randomCvc);
+    }
+    public static String getCurrentMonth() {
+        LocalDate date = LocalDate.now();
+        String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
+        return currentMonth;
+    }
+
+    public static String getNotCurrentMonth() {
+        LocalDate date = LocalDate.now();
+        String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
+        return currentMonth + 20;
+    }
+
+    public static CardInfo generateDataWithParamCardOwnerNameApprovedCard(String name) {
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), name, randomCvc);
+    }
+
+    public static String getCurrentYear() {
+        LocalDate date = LocalDate.now();
+        String currentYear = date.format(DateTimeFormatter.ofPattern("yy"));
+        return currentYear;
+    }
+
+    public static String invalidCard() {
+        return faker.numerify("#### #### #### ####");
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CardInfo {
         String number;
         String month;
         String year;
-        String owner;
-        String cvv;
+        String holder;
+        String cvc;
     }
 
-    public static CardValidInformationModel getValidApprovedCardData() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivanov Petr", "111");
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreditCardData {
+        private String id;
+        private String bank_id;
+        private String created;
+        private String status;
     }
 
-    public static CardValidInformationModel getValidDeclinedCardData() {
-        return new CardValidInformationModel("4444 4444 4444 4442", "10", "22", "Ivanov Petr", "111");
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PaymentCardData {
+        private String id;
+        private String amount;
+        private String created;
+        private String status;
+        private String transaction_id;
     }
 
-//    FIELD NUMBER
-
-    public static CardValidInformationModel getEmptyCardNumber() {
-        return new CardValidInformationModel("", "10", "22", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getInvalidCardNumberWith15Symbols() {
-        return new CardValidInformationModel("4444 4444 4444 444", "10", "22", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getAnotherBankCardNumber() {
-        return new CardValidInformationModel("5559 4444 4444 4444", "10", "22", "Ivanov Petr", "111");
-    }
-
-//    FIELD MONTH
-
-    public static CardValidInformationModel getEmptyMonth() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "", "22", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getInvalidFormatMonthIsZeroZero() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "00", "22", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getInvalidFormatMonthIsIrrelevant() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "13", "22", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getInvalidFormatMonthIsOneDigit() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "8", "22", "Ivanov Petr", "111");
-    }
-
-//    FIELD YEAR
-
-    public static CardValidInformationModel getEmptyYear() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getEarlyYear() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "19", "Ivanov Petr", "111");
-    }
-
-    public static CardValidInformationModel getFutureYear() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "50", "Ivanov Petr", "111");
-    }
-
-//    FIELD OWNER
-
-    public static CardValidInformationModel getEmptyOwner() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithOneWord() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivan", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithThreeWords() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivanov Petr Ivanovich", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithLowerCase() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "ivanov petr", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithUpperCase() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "IVANOV PETR", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithCyrillic() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "иванов Петр", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithDigits() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "12345", "111");
-    }
-
-    public static CardValidInformationModel getInvalidOwnerWithSymbols() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "%№%№", "111");
-    }
-
-//    FIELD CVV
-
-    public static CardValidInformationModel getEmptyCVV() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivanov Petr", "");
-    }
-
-    public static CardValidInformationModel getInvalidCVVWith1Digit() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivanov Petr", "1");
-    }
-
-    public static CardValidInformationModel getInvalidCVVWith2Digits() {
-        return new CardValidInformationModel("4444 4444 4444 4441", "10", "22", "Ivanov Petr", "11");
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TableOrderEntity {
+        private String id;
+        private String created;
+        private String credit_id;
+        private String payment_id;
     }
 }
+
