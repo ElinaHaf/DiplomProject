@@ -1,63 +1,80 @@
 package ru.netology.data;
 
+import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-
+import ru.netology.data.DataHelper;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class SQLHelper {
-    private static final String url = System.getProperty("db.url");
-    private static final String user = System.getProperty("db.user");
-    private static final String password = System.getProperty("db.password");
-    private static Connection conn;
+    private static boolean runFromIdea = true;
 
-    public static void clearDB() {
-        var cleanCreditRequest = "DELETE FROM credit_request_entity;";
-        var cleanOrder = "DELETE FROM order_entity;";
-        var cleanPayment = "DELETE FROM payment_entity;";
-        var runner = new QueryRunner();
-        try (var conn = DriverManager.getConnection(url, user, password)) {
-            runner.update(conn, cleanCreditRequest);
-            runner.update(conn, cleanOrder);
-            runner.update(conn, cleanPayment);
-        } catch (Exception e) {
-            System.out.println("SQL exception in clearDB");
+    private static QueryRunner runner = new QueryRunner();
+    private static String url = runFromIdea
+            ? "jdbc:mysql://localhost:3306/app"
+            : System.getProperty("db.url"); //"jdbc:mysql://localhost:3306/app";//
+    private static String userName = runFromIdea
+            ? "app" : System.getProperty("db.username"); // "app";//
+    private static String password = runFromIdea
+            ? "pass" : System.getProperty("db.password"); // "pass";//
+
+    public SQLHelper() {
+
+    }
+
+    @SneakyThrows
+    private static Connection getConn() {
+        return DriverManager.getConnection(url, userName, password);
+    }
+
+    @SneakyThrows
+    public static DataHelper.CreditCardData getCreditCardData() {
+        var cardDataSQL = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
+        try (var conn = getConn()) {
+            var result = runner.query(conn, cardDataSQL,
+                    new BeanHandler<>(DataHelper.CreditCardData.class));
+            return result;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
+        return null;
     }
 
-    public static String getPaymentStatus() {
-        var codesSQL = "SELECT status FROM payment_entity;";
-        return getData(codesSQL);
-    }
-
-    public static String getCreditRequestStatus() {
-        var codesSQL = "SELECT status FROM credit_request_entity;";
-        return getData(codesSQL);
-    }
-
-    public static String getOrderCount() {
-        Long count = null;
-        var codesSQL = " SELECT COUNT(*) FROM order_entity;";
-        var runner = new QueryRunner();
-        try (var conn = DriverManager.getConnection(url, user, password)) {
-            count = runner.query(conn, codesSQL, new ScalarHandler<>());
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @SneakyThrows
+    public static DataHelper.PaymentCardData getPaymentCardData() {
+        var cardDataSQL = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1";
+        try (var conn = getConn()) {
+            var result = runner.query(conn, cardDataSQL,
+                    new BeanHandler<>(DataHelper.PaymentCardData.class));
+            return result;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
-        return Long.toString(count);
+        return null;
     }
 
-    private static String getData(String query) {
-        String data = "";
-        var runner = new QueryRunner();
-        try (var conn = DriverManager.getConnection(url, user, password)) {
-            data = runner.query(conn, query, new ScalarHandler<>());
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static DataHelper.TableOrderEntity getTableOrderEntity() {
+        var orderEntityDataSQL = "SELECT * FROM order_entity ORDER BY created DESC LIMIT 1";
+        try (var conn = getConn()) {
+            var result = runner.query(conn, orderEntityDataSQL,
+                    new BeanHandler<>(DataHelper.TableOrderEntity.class));
+            return result;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
-        return data;
+        return null;
+    }
+
+    @SneakyThrows
+    public static void cleanDatabase() {
+        var conn = getConn();
+        runner.execute(conn, "DELETE FROM order_entity");
+        runner.execute(conn, "DELETE FROM payment_entity");
+        runner.execute(conn, "DELETE FROM credit_request_entity");
     }
 }

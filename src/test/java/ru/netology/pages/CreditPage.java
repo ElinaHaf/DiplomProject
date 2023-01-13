@@ -6,23 +6,26 @@ import ru.netology.data.DataHelper;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 
-public class PaymentPage {
-    private SelenideElement heading = Selenide.$x("//h3[text()='Оплата по карте']");
+public class CreditPage {
+    private SelenideElement heading = Selenide.$x("//h3[text()='Кредит по данным карты']");
 
-    private SelenideElement cardNumberField = Selenide.$x("//span[text()='Номер карты']/following-sibling::span/input");
-    private SelenideElement monthField = Selenide.$x("//span[text()='Месяц']/following-sibling::span/input");
-    private SelenideElement yearField = Selenide.$x("//span[text()='Год']/following-sibling::span/input");
-    private SelenideElement cardOwnerField = Selenide.$x("//span[text()='Владелец']/following-sibling::span/input");
-    private SelenideElement cvcField = Selenide.$x("//span[text()='CVC/CVV']/following-sibling::span/input");
-
+    private SelenideElement cardNumberField = Selenide.$x("//span[text()='Номер карты']" +
+            "/following-sibling::span/input");
+    private SelenideElement monthField = Selenide.$x("//span[text()='Месяц']" +
+            "/following-sibling::span/input");
+    private SelenideElement yearField = Selenide.$x("//span[text()='Год']" +
+            "/following-sibling::span/input");
+    private SelenideElement cardOwnerField = Selenide.$x("//span[text()='Владелец']" +
+            "/following-sibling::span/input");
+    private SelenideElement cvcField = Selenide.$x("//span[text()='CVC/CVV']" +
+            "/following-sibling::span/input");
     private SelenideElement proceedBtn = Selenide.$x("//span[text()='Продолжить']");
     private SelenideElement errorMessWithDecline = Selenide.$x("//div[text()='Ошибка!" +
             " Банк отказал в проведении операции.']");
     private SelenideElement approvedMess = Selenide.$x("//div[text()='Операция одобрена Банком.']");
-
-
     private SelenideElement warningCardNumberField = Selenide.$x("//span[text()='Номер карты']" +
             "/following-sibling::span[@class='input__sub']");
     private SelenideElement warningMonthField = Selenide.$x("//span[text()='Месяц']" +
@@ -34,11 +37,11 @@ public class PaymentPage {
     private SelenideElement warningCvcField = Selenide.$x("//span[text()='CVC/CVV']" +
             "/following-sibling::span[@class='input__sub']");
 
-    public PaymentPage() {
+    public CreditPage() {
         heading.shouldBe(visible);
     }
 
-    public void insertValidPaymentCardDataForBank(DataHelper.CardInfo cardInfo) {
+    public void insertValidCreditCardDataForBank(DataHelper.CardInfo cardInfo) {
         cardNumberField.setValue(cardInfo.getNumber());
         monthField.setValue(cardInfo.getMonth());
         yearField.setValue(cardInfo.getYear());
@@ -72,6 +75,7 @@ public class PaymentPage {
         warningCvcField.shouldBe(visible);
     }
 
+
     public void clickProceedButton() {
         proceedBtn.click();
     }
@@ -84,13 +88,6 @@ public class PaymentPage {
         approvedMess.shouldBe(visible, Duration.ofSeconds(10));
     }
 
-    public void notCheckWarningUnderAllFields() {
-        warningCardNumberField.shouldNotBe(visible);
-        warningMonthField.shouldNotBe(visible);
-        warningYearField.shouldNotBe(visible);
-        warningCardOwnerField.shouldNotBe(visible);
-        warningCvcField.shouldNotBe(visible);
-    }
-
-
 }
+
+

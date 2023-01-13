@@ -51,13 +51,13 @@ java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" -jar artifac
 
 
 ```
-gradlew test -Dtest.dburl=jdbc:mysql://localhost:3306/app
+./gradlew test "-Ddb.url=jdbc:mysql://localhost:3306/app" "-Ddb.username=app" "-Ddb.password=pass"
 ```
 
 для конфигурации с postgresql
 
 ```
-gradlew test -Dtest.dburl=jdbc:postgresql://localhost:5432/app
+./gradlew test "-Ddb.url=jdbc:postgresql://localhost:5432/app" "-Ddb.username=app" "-Ddb.password=pass"
 ```
 
 5. Остановить контейнеры командой CTRL + C и после удалить контейнеры командой

@@ -1,20 +1,20 @@
-package tests;
+package ru.netology.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import data.APIHelper;
-import data.SQLHelper;
+import ru.netology.data.RestApiHelper;
+import ru.netology.data.SQLHelper;
+import ru.netology.data.DataHelper;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import data.DataHelper;
-import page.MainPage;
+import ru.netology.pages.MainPage;
 
 
 import static com.codeborne.selenide.Selenide.closeWindow;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CreditCardTest {
+public class TestCreditCard {
     MainPage mainPage = open("http://localhost:8080/", MainPage.class);
 
     @BeforeAll
@@ -33,20 +33,19 @@ public class CreditCardTest {
     }
 
     @Test
-    void shouldSuccessTransactionWithApprovedPaymentCardThroughAPI() {
+    void shouldSuccessTransactionWithApprovedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
-        APIHelper.createCard(cardInfo);
+        RestApiHelper.createCard(cardInfo, "/api/v1/credit");
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     @Test
-    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        APIHelper.createCard(cardInfo);
+    void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        RestApiHelper.createCard(cardInfo, "/api/v1/credit");
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("DECLINED", creditCardData.getStatus());
-
     }
 
     @Test
@@ -55,6 +54,8 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithDeclinedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkErrorMessDeclineFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("DECLINED", creditCardData.getStatus());
     }
 
     @Test
@@ -63,6 +64,8 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     @Test
@@ -74,6 +77,8 @@ public class CreditCardTest {
                 String.valueOf(maxYear));
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     //card
@@ -82,7 +87,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithNotApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toCreditCard.checkErrorMessDeclineFromBank();
     }
 
     @Test
@@ -90,7 +95,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithCardNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
     }
 
     @Test
@@ -113,7 +118,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseMonth() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("90","22");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("90", "22");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверно указан срок действия карты");
     }
@@ -146,7 +151,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseYear() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("10","88");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("10", "88");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверно указан срок действия карты");
     }
@@ -156,7 +161,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderYearField ("Истёк срок действия карты");
+        toCreditCard.checkWarningUnderYearField("Истёк срок действия карты");
     }
 
     @Test
@@ -240,5 +245,4 @@ public class CreditCardTest {
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
-}
 }
