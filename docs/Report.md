@@ -13,7 +13,7 @@
 Успешных кейсов 73,58 %
 Неуспешных кейсов 26,41%
 
-![](../../../Desktop/Allure.jpg)
+![Allure](https://user-images.githubusercontent.com/103569727/213904666-952b80c7-99f1-4537-84fd-78d23ac1aa7a.jpg)
 
 **Общие рекомендации**
 
