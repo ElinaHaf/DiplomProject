@@ -113,6 +113,13 @@ public class TestCreditCard {
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
     }
+    @Test
+    void shouldShowErrorIfAllCardNumberFieldAreSpecialSymbols() {
+        var toCreditCard = mainPage.creditPage();
+        var cardInfo = DataHelper.generateDataWithCardNumberSpecialCharacters();
+        toCreditCard.insertValidCreditCardDataForBank(cardInfo);
+        toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
+    }
 
     //month
     @Test

@@ -103,6 +103,13 @@ public class PaymentTest {
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
+    @Test
+    void shouldShowErrorIfAllCardNumberFieldAreSpecialSymbols() {
+        var toPaymentPage = mainPage.paymentPage();
+        var cardInfo = DataHelper.generateDataWithCardNumberSpecialCharacters();
+        toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
+        toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
+    }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreSpecialCharacters() {
@@ -230,6 +237,13 @@ public class PaymentTest {
 
     @Test
     void shouldShowErrorIfAllCvcNumberFieldAreEmpty() {
+        var toPaymentPage = mainPage.paymentPage();
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty();
+        toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
+        toPaymentPage.checkWarningUnderCvcField("Неверный формат");
+    }
+    @Test
+    void shouldShowErrorIfAllCvcNumberFieldEmpty() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);

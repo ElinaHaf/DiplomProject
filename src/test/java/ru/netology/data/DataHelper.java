@@ -37,7 +37,7 @@ public class DataHelper {
     public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFieldAreSpecialCharacters() {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
-        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "^&*");
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "-=*");
     }
 
     public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty() {
@@ -55,7 +55,7 @@ public class DataHelper {
     public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFalse() {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
-        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "23");
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "95");
     }
 
     //year
@@ -90,6 +90,12 @@ public class DataHelper {
         return new CardInfo(numberApprovedCard, "&*", String.valueOf(validYear), randomName, randomCvc);
     }
 
+    public static CardInfo generateDataWithEmptyCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo("", getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
     public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreZero() {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
@@ -103,11 +109,6 @@ public class DataHelper {
         return new CardInfo(NotApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
     }
 
-    public static CardInfo generateDataWithEmptyCardNumber() {
-        var randomName = faker.name().fullName();
-        var randomCvc = faker.number().digits(3);
-        return new CardInfo("", getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
-    }
 
     public static CardInfo generateDataWithCardNumberFieldAreZero() {
         var randomName = faker.name().fullName();
