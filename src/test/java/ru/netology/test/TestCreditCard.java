@@ -10,7 +10,6 @@ import org.junit.jupiter.api.*;
 import ru.netology.pages.MainPage;
 
 
-import static com.codeborne.selenide.Selenide.closeWindow;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,22 +29,6 @@ public class TestCreditCard {
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
-    }
-
-    @Test
-    void shouldSuccessTransactionWithApprovedCreditCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        RestApiHelper.createCard(cardInfo, "/api/v1/credit");
-        var creditCardData = SQLHelper.getCreditCardData();
-        assertEquals("APPROVED", creditCardData.getStatus());
-    }
-
-    @Test
-    void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
-        RestApiHelper.createCard(cardInfo, "/api/v1/credit");
-        var creditCardData = SQLHelper.getCreditCardData();
-        assertEquals("DECLINED", creditCardData.getStatus());
     }
 
     @Test

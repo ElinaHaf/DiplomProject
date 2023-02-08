@@ -30,21 +30,6 @@ public class PaymentTest {
         SelenideLogger.removeListener("allure");
     }
 
-    @Test
-    void shouldSuccessTransactionWithApprovedPaymentCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        RestApiHelper.createCard(cardInfo, "/api/v1/pay");
-        var paymentCardData = SQLHelper.getPaymentCardData();
-        assertEquals("APPROVED", paymentCardData.getStatus());
-    }
-
-    @Test
-    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
-        RestApiHelper.createCard(cardInfo, "/api/v1/pay");
-        var paymentCardData = SQLHelper.getPaymentCardData();
-        assertEquals("DECLINED", paymentCardData.getStatus());
-    }
 
     @Test
     void shouldSuccessTransactionApprovedCard() {

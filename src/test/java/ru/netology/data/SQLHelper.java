@@ -12,16 +12,12 @@ import java.sql.SQLException;
 
 
 public class SQLHelper {
-    private static boolean runFromIdea = true;
 
-    private static QueryRunner runner = new QueryRunner();
-    private static String url = runFromIdea
-            ? "jdbc:mysql://localhost:3306/app"
-            : System.getProperty("db.url"); //"jdbc:mysql://localhost:3306/app";//
-    private static String userName = runFromIdea
-            ? "app" : System.getProperty("db.username"); // "app";//
-    private static String password = runFromIdea
-            ? "pass" : System.getProperty("db.password"); // "pass";//
+    static String url = System.getProperty("db.url");//"jdbc:mysql://localhost:3306/app";//
+    static String userName = System.getProperty("db.user");// "app";//
+    static String password = System.getProperty("db.password");// "pass";//
+
+   private static QueryRunner runner = new QueryRunner();
 
     public SQLHelper() {
 
@@ -35,39 +31,27 @@ public class SQLHelper {
     @SneakyThrows
     public static DataHelper.CreditCardData getCreditCardData() {
         var cardDataSQL = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
-        try (var conn = getConn()) {
-            var result = runner.query(conn, cardDataSQL,
+        var conn = getConn();
+        var result = runner.query(conn, cardDataSQL,
                     new BeanHandler<>(DataHelper.CreditCardData.class));
             return result;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
     @SneakyThrows
     public static DataHelper.PaymentCardData getPaymentCardData() {
         var cardDataSQL = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1";
-        try (var conn = getConn()) {
-            var result = runner.query(conn, cardDataSQL,
+        var conn = getConn();
+        var result = runner.query(conn, cardDataSQL,
                     new BeanHandler<>(DataHelper.PaymentCardData.class));
             return result;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
-    public static DataHelper.TableOrderEntity getTableOrderEntity() {
+    public static DataHelper.TableOrderEntity getTableOrderEntity() throws SQLException {
         var orderEntityDataSQL = "SELECT * FROM order_entity ORDER BY created DESC LIMIT 1";
-        try (var conn = getConn()) {
-            var result = runner.query(conn, orderEntityDataSQL,
+        var conn = getConn();
+        var result = runner.query(conn, orderEntityDataSQL,
                     new BeanHandler<>(DataHelper.TableOrderEntity.class));
             return result;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
     @SneakyThrows

@@ -18,7 +18,7 @@ public class RestApiHelper {
             .log(LogDetail.ALL)
             .build();
 
-    public static void createCard(DataHelper.CardInfo cardInfo, String path) {
+    public static void cardInfo(DataHelper.CardInfo cardInfo, String path) {
         given()
                 .spec(requestSpec)
                 .body(cardInfo)
